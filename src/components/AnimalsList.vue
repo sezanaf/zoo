@@ -26,7 +26,11 @@
       <div>
         <label>Select sector: </label>
         <select v-model="newSector">
-          <option v-for="(sector, index) in sectors" :key="index">
+          <option
+            v-for="(sector, index) in sectors"
+            :key="index"
+            :value="sector"
+          >
             {{ sector }}
           </option>
         </select>
@@ -60,6 +64,23 @@
         <button @click="getAllAnimals(sector)">See all animals</button>
       </tr>
     </table>
+
+    <div>
+      <div v-for="(sector, index) in sectors" :key="index">
+        <p>{{ sector }}</p>
+        <ul v-if="filterAnimalsBySector(sector).length">
+          <li
+            v-for="(animal, index) in filterAnimalsBySector(sector)"
+            :key="index"
+          >
+            <span>Species: {{ animal.species }}, </span>
+            <span>Name: {{ animal.name }}, </span>
+            <span>Date of Birth: {{ animal.dateOfBirth }}, </span>
+          </li>
+        </ul>
+        <p v-else>There are no animals at this section</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -134,6 +155,9 @@ export default {
       } else {
         alert(newArray);
       }
+    },
+    filterAnimalsBySector(sector) {
+      return this.animals.filter((el) => el.sector === sector);
     },
   },
 };
